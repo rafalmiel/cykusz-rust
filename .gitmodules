@@ -1,0 +1,3 @@
+[submodule "lib/rlibc"]
+	path = lib/rlibc
+	url = git@github.com:rafalmiel/rlibc.git
