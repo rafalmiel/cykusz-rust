@@ -11,5 +11,5 @@ crate-type = ["staticlib"]
 git = "https://github.com/rafalmiel/rust-libcore"
 
 [dependencies.rlibc]
-path = "lib/rlibc"
+git = "https://github.com/rafalmiel/rlibc.git"
 
