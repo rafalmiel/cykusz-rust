@@ -1,27 +1,31 @@
-/* === Multiboot Header === */
-MBALIGN     =  (1<<0)
-MEMINFO     =  (1<<1)
-MAGIC       =  0x1BADB002
-FLAGS       = (MBALIGN | MEMINFO)
-CHECKSUM    = -(MAGIC + FLAGS)
+MBALIGN		equ	1<<0
+MEMINFO		equ	1<<1
+MAGIC		equ	0x1BADB002
+FLAGS		equ	MBALIGN | MEMINFO
+CHECKSUM	equ	-(MAGIC + FLAGS)
 
-.section .multiboot, "a"
-	.long MAGIC
-	.long FLAGS
-	.long CHECKSUM
+section .multiboot
+align 4
+	dd MAGIC
+	dd FLAGS
+	dd CHECKSUM
 
-.section .text
-.extern kmain
-.globl start
+section .bootstrap_stack
+align 4
+stack_bottom:
+times 16384 db 0
+stack_top:
+
+section .text
+extern kmain
+global start
+
 start:
-	mov $init_stack, %esp
+	mov esp, stack_top
 	call kmain
-	/* If kmain returns, loop forefer */
-.l:
+	
+.hang:
 	hlt
-	jmp .l	
+	jmp .hang
 
-.section .bss
-	.space 0x1000*2
-init_stack:
 

@@ -2,25 +2,29 @@ ENTRY(start)
 OUTPUT_FORMAT(elf32-i386)
 
 SECTIONS {
-	. = 0x100000;
+	. = 1M;
 
-	.text  : AT(ADDR(.text)) {
+	.text  BLOCK(4K) : ALIGN(4K) 
+	{
                 KEEP( *(.multiboot) )
-		*(.text .text.*)
+		*(.text)
 	}
 	
-	/* read-only data, page aligned to allow use of the no-execute feature */
-	.rodata : AT(ADDR(.rodata)) {
-		*(.rodata .rodata.*)
+	.rodata  BLOCK(4K) : ALIGN(4K)
+	{
+		*(.rodata)
 	}
 	
-	.data : AT(ADDR(.data)) {
-		*(.data .data.*)
+	.data  BLOCK(4K) : ALIGN(4K) 
+	{
+		*(.data)
 	}
 	
 	/* Zero-initialised data */
-	.bss : AT(ADDR(.bss)) {
-		*(.bss .bss.*)
+	.bss  BLOCK(4K) : ALIGN(4K) 
+	{
+		*(.bss)
+		*(.bootstrap_stack)
 	}
 	
 	kernel_end = .;
